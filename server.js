@@ -35,14 +35,27 @@ app.use(cors({
 app.use(bodyParser.json());
 
 app.use(express.json());
+// app.use(session({
+//   secret: 'your-secret-key',  // change to a secure secret
+//   resave: false,
+//   saveUninitialized: false,
+//   cookie: {
+//     maxAge: 1000 * 60 * 60 // 1 hour
+//   }
+// }));
 app.use(session({
-  secret: 'your-secret-key',  // change to a secure secret
+  secret: 'your-secret-key',
   resave: false,
   saveUninitialized: false,
   cookie: {
-    maxAge: 1000 * 60 * 60 // 1 hour
+    maxAge: 1000 * 60 * 60,
+    secure: process.env.NODE_ENV === 'production',    // true if deployed
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
   }
 }));
+
+
+
 // MongoDB Connection
 mongoose.connect("mongodb+srv://yogeeshhegde778:gMSpJ27U4c8ExbG6@cluster0.dvpfiyn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
   useNewUrlParser: true,
